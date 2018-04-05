@@ -1,0 +1,20 @@
+# Test output
+out
+test-output
+/bin/
+
+# Allure
+.allure
+allure-results
+
+#IDEA Files
+.idea
+target
+*.iml
+*.ipr
+
+#Eclipse files
+*.settings
+*.classpath
+*.project
+*.pydevproject
