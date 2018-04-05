@@ -1,7 +1,11 @@
 package tasks;
 
+import static java.util.Arrays.asList;
 import static net.serenitybdd.screenplay.Tasks.instrumented;
 
+import com.google.common.collect.ImmutableList;
+import java.util.List;
+import net.serenitybdd.core.steps.Instrumented;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
 import net.serenitybdd.screenplay.actions.Enter;
@@ -14,18 +18,23 @@ import ui.SearchBox;
  */
 public class Search implements Task {
 
-  private final String searchTerm;
+  private final List<String> searchTerms;
 
-  public Search(String searchTerm) {
-    this.searchTerm = searchTerm;
+  public Search(List<String> searchTerms) {
+    this.searchTerms = ImmutableList.copyOf(searchTerms);
   }
 
   @Step("Search for KeyWord")
   public <T extends Actor> void performAs(T actor) {
-    actor.attemptsTo(Enter.theValue(searchTerm).into(SearchBox.SEARCH_FIELD).thenHit(Keys.ENTER));
+
+    searchTerms.forEach(
+        searchTerm -> Enter.theValue(searchTerm).into(SearchBox.SEARCH_FIELD)
+            .thenHit(Keys.ENTER));
+
+//    actor.attemptsTo(Enter.theValue(searchTerm).into(SearchBox.SEARCH_FIELD).thenHit(Keys.ENTER));
   }
 
-  public static Search forTheTerm(String searchTerm) {
-    return instrumented(Search.class, searchTerm);
+  public static Search forTheTerms(String... searchTerms) {
+    return Instrumented.instanceOf(Search.class).withProperties(asList(searchTerms));
   }
 }
